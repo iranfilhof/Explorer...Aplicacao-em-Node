@@ -1,5 +1,5 @@
 
-# Backend Rocketmovies
+# API Rocketmovies
 
 Projeto de uma aplicação em Node onde o usuário cadastra um filme, preenche com algumas informações (nome, descrição, nota) e cria tags relacionadas a ele.
 
