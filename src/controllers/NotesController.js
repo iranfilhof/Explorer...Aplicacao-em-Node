@@ -5,14 +5,14 @@ class NotesController {
   async create(request, response) {
     const { title, description, tags } = request.body;
     let {rating} = request.body;
-    const { user_id } = request.params;
+    const user_id = request.user.id;
 
     let ratingInt = Number(rating).toFixed(1);
 
     if(ratingInt > 5 || ratingInt < 0) {
       throw new AppError("A nota do filme deve ser entre 0 e 5!")
     }
-// continaur aqui
+
     rating = ratingInt;
 
     const [note_id] = await knex("notes").insert({
@@ -56,7 +56,8 @@ class NotesController {
   }
 
   async index(request, response) {
-    const { user_id, title, tags, rating } = request.query;
+    const { title, tags, rating } = request.query;
+    const user_id = request.user.id
 
     let notes;
 
@@ -73,6 +74,7 @@ class NotesController {
        .whereLike("notes.title", `%${title}%`)
        .whereIn("name", filterTags)
        .innerJoin("notes", "notes.id", "tags.note_id")
+       .groupBy("note.id")
        .orderBy("notes.title");
     }
     else if(rating) {
